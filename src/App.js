@@ -53,8 +53,8 @@ function App() {
     bulletproof: 0,
     doc: 1,
     cop: 1,
-    simple: 1,
-    twins: 2,
+    villager: 1,
+    twins: 0,
   });
 
   const [playerNames, setPlayerNames] = useState([]);
@@ -82,6 +82,65 @@ function App() {
 
   const uniqueAvailableRoles = [...new Set(availableRoles)];
 
+  const roleDisplay = (roleObject, roleUpdateFn) =>
+    Object.entries(roleObject).map(([role, count]) => (
+      <Grid
+        item
+        key={role}
+        style={{ width: "100%", borderBottom: "1px dashed #a3a3a3" }}>
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center">
+          <Grid
+            item
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              const { description, player, narrator } = roleDescriptions[role];
+
+              window.alert(`Role : ${role}
+Description: ${description}   
+Player notes: ${player} 
+Master notes: ${narrator}
+            `);
+            }}>
+            {role}
+          </Grid>
+          <Grid item>
+            <Grid container>
+              <IconButton
+                disabled={count === 0}
+                size="small"
+                onClick={() => {
+                  roleUpdateFn({
+                    ...roleObject,
+                    [role]: count - 1,
+                  });
+                }}>
+                <ArrowDownwardIcon />
+              </IconButton>
+              <Typography
+                variant="body1"
+                color={count === 0 ? "inherit" : "secondary"}>
+                {count}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={() => {
+                  roleUpdateFn({
+                    ...roleObject,
+                    [role]: count + 1,
+                  });
+                }}>
+                <ArrowUpwardIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    ));
+
   const handleAllocate = () => {
     if (players !== playerNames.filter((name) => name !== "").length)
       window.alert("Enter all player names or remove roles");
@@ -101,7 +160,12 @@ function App() {
         const random = Math.random();
         const allotedRoleIndex = Math.floor(random * countRolesLeft);
         const allotedRole = shuffledRoles[allotedRoleIndex];
-        allotedRoles.push({ alive: true, allotedRole });
+
+        allotedRoles.push({
+          alive: true,
+          allotedRole,
+          type: roleDescriptions[allotedRole].type,
+        });
         shuffledRoles.splice(allotedRoleIndex, 1);
       }
       setAllocation(allotedRoles);
@@ -112,6 +176,13 @@ function App() {
     trace.stop();
   }, []);
 
+  const aliveAllocation = allocation.filter((role) => role.alive);
+
+  const mafiaAlive = aliveAllocation.filter((role) => role.type === "M").length,
+    villageAlive = aliveAllocation.filter(
+      (role) => role.type !== "M" && role.allotedRole !== "idiot"
+    ).length;
+
   return (
     <Grid className="App" container direction="column" alignItems="center">
       <Typography variant="h2">Mafia role allocator</Typography>
@@ -121,7 +192,10 @@ function App() {
         justify="space-around"
         align-items="flex-start">
         <Grid item className="three-column">
-          <Typography variant="h4">Roles - Click for description</Typography>
+          <Typography variant="h4">Roles</Typography>
+          <Typography variant="caption">
+            Click on individual role name to read description (popup)
+          </Typography>
           <Grid
             container
             className="roles"
@@ -130,89 +204,13 @@ function App() {
             <Grid item>
               <Typography variant="h5">Mafia roles ({mafiaCount})</Typography>
             </Grid>
-            {Object.entries(mafiaRoles).map(([role, count]) => (
-              <Grid item key={role}>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="flex-start">
-                  <Grid item>{role}</Grid>
-                  <Grid item>
-                    <Grid container>
-                      <IconButton
-                        disabled={count === 0}
-                        size="small"
-                        onClick={() => {
-                          setMafiaRoles({
-                            ...mafiaRoles,
-                            [role]: count - 1,
-                          });
-                        }}>
-                        <ArrowDownwardIcon />
-                      </IconButton>
-                      <Typography variant="body1" color="primary">
-                        {count}
-                      </Typography>
-                      <IconButton
-                        size="small"
-                        onClick={() => {
-                          setMafiaRoles({
-                            ...mafiaRoles,
-                            [role]: count + 1,
-                          });
-                        }}>
-                        <ArrowUpwardIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
+            {roleDisplay(mafiaRoles, setMafiaRoles)}
             <Grid item>
               <Typography variant="h5">
                 Village roles ({villagerCount}){" "}
               </Typography>
             </Grid>
-            {Object.entries(villageRoles).map(([role, count]) => (
-              <Grid item key={role}>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="flex-start">
-                  <Grid item>{role}</Grid>
-                  <Grid item>
-                    <Grid container>
-                      <IconButton
-                        disabled={count === 0}
-                        size="small"
-                        onClick={() => {
-                          setVillageRoles({
-                            ...villageRoles,
-                            [role]: count - 1,
-                          });
-                        }}>
-                        <ArrowDownwardIcon />
-                      </IconButton>
-                      <Typography variant="body1" color="primary">
-                        {count}
-                      </Typography>
-                      <IconButton
-                        size="small"
-                        onClick={() => {
-                          setVillageRoles({
-                            ...villageRoles,
-                            [role]: count + 1,
-                          });
-                        }}>
-                        <ArrowUpwardIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
+            {roleDisplay(villageRoles, setVillageRoles)}
           </Grid>
         </Grid>
         <Grid item className="three-column">
@@ -221,17 +219,22 @@ function App() {
             {new Array(players).fill("").map((p, i) => (
               <TextField
                 key={i}
+                variant="outlined"
+                style={{ margin: "5px" }}
                 label={`Player :${i + 1}`}
                 value={playerNames[i]}
                 onChange={(e) => {
-                  const newPlayerNames = playerNames;
-                  newPlayerNames[i] = e.target.value;
-                  setPlayerNames(newPlayerNames);
+                  setPlayerNames([
+                    ...playerNames.slice(0, i),
+                    e.target.value,
+                    ...playerNames.slice(i + 1),
+                  ]);
                 }}
               />
             ))}
             <Button
               variant="contained"
+              style={{ margin: "5px" }}
               color="primary"
               onClick={handleAllocate}>
               Allocate!
@@ -239,11 +242,31 @@ function App() {
           </Grid>
         </Grid>
         <Grid item className="three-column">
-          <Typography variant="h4">Allocation</Typography>
+          <Typography variant="h4">Allocation </Typography>
+          <Typography variant="h6">
+            Game status - Mafia {mafiaAlive} vs Villagers {villageAlive}
+          </Typography>
+          <Typography variant="caption">
+            {mafiaAlive > villageAlive
+              ? "Mafia wins!"
+              : villageAlive > 0 && mafiaAlive === 0 && "Village wins!"}
+          </Typography>
           <Grid container className="roles" direction="column">
             {allocation.map((role, i) => (
-              <Grid item key={i}>
-                {playerNames[i]} - {role.allotedRole}
+              <Grid
+                item
+                key={i}
+                style={{
+                  border: "1px dashed a3a3a3",
+                  padding: "5px",
+                  textAlign: "justify",
+                  color: role.type === "M" ? "red" : "black",
+                  textDecoration: role.alive || "line-through",
+                }}>
+                <Typography variant="body1">
+                  {playerNames[i]} - {role.allotedRole}
+                </Typography>
+
                 <IconButton
                   size="small"
                   onClick={() => {
@@ -259,6 +282,7 @@ function App() {
                     <CancelIcon />
                   )}
                 </IconButton>
+                <TextField placeholder="game master notes" />
               </Grid>
             ))}
           </Grid>
