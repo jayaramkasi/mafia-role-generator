@@ -10,8 +10,13 @@ import {
 
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import CancelIcon from "@material-ui/icons/Cancel";
+
+import roleDescriptions from "./roleDescriptions.json";
 
 import firebase from "firebase";
+import "firebase/performance";
 
 import "./App.css";
 
@@ -55,9 +60,27 @@ function App() {
   const [playerNames, setPlayerNames] = useState([]);
   const [allocation, setAllocation] = useState([]);
 
-  const players =
-    Object.values(mafiaRoles).reduce((sum, value) => sum + value, 0) +
-    Object.values(villageRoles).reduce((sum, value) => sum + value, 0);
+  const mafiaCount = Object.values(mafiaRoles).reduce(
+      (sum, value) => sum + value,
+      0
+    ),
+    villagerCount = Object.values(villageRoles).reduce(
+      (sum, value) => sum + value,
+      0
+    );
+
+  const players = mafiaCount + villagerCount;
+
+  const allRoles = { ...mafiaRoles, ...villageRoles };
+
+  const availableRoles = Object.entries(allRoles)
+    .filter(([role, count]) => count > 0)
+    .reduce((roleArray, [role, count]) => {
+      for (let i = 0; i < count; i++) roleArray.push(role);
+      return roleArray;
+    }, []);
+
+  const uniqueAvailableRoles = [...new Set(availableRoles)];
 
   const handleAllocate = () => {
     if (players !== playerNames.filter((name) => name !== "").length)
@@ -67,14 +90,7 @@ function App() {
     else {
       firebase.analytics().logEvent("add_to_cart");
       // Can allocate
-      const allRoles = { ...mafiaRoles, ...villageRoles };
 
-      const availableRoles = Object.entries(allRoles)
-        .filter(([role, count]) => count > 0)
-        .reduce((roleArray, [role, count]) => {
-          for (let i = 0; i < count; i++) roleArray.push(role);
-          return roleArray;
-        }, []);
       // Shuffle
       let shuffledRoles = shuffle(availableRoles);
       console.log(shuffledRoles);
@@ -82,14 +98,10 @@ function App() {
       // allocate
       for (let i = 0; i < players; i++) {
         const countRolesLeft = shuffledRoles.length;
-
         const random = Math.random();
-
         const allotedRoleIndex = Math.floor(random * countRolesLeft);
-
         const allotedRole = shuffledRoles[allotedRoleIndex];
-
-        allotedRoles.push(allotedRole);
+        allotedRoles.push({ alive: true, allotedRole });
         shuffledRoles.splice(allotedRoleIndex, 1);
       }
       setAllocation(allotedRoles);
@@ -102,21 +114,21 @@ function App() {
 
   return (
     <Grid className="App" container direction="column" alignItems="center">
-      <Typography variant="h1">Mafia role allocator</Typography>
+      <Typography variant="h2">Mafia role allocator</Typography>
       <Grid
         container
         direction="row"
         justify="space-around"
         align-items="flex-start">
         <Grid item className="three-column">
-          <Typography variant="h2">Roles</Typography>
+          <Typography variant="h4">Roles - Click for description</Typography>
           <Grid
             container
             className="roles"
             direction="column"
             alignItems="flex-start">
             <Grid item>
-              <Typography variant="h4">Mafia roles</Typography>
+              <Typography variant="h5">Mafia roles ({mafiaCount})</Typography>
             </Grid>
             {Object.entries(mafiaRoles).map(([role, count]) => (
               <Grid item key={role}>
@@ -158,7 +170,9 @@ function App() {
               </Grid>
             ))}
             <Grid item>
-              <Typography variant="h4">Village roles</Typography>
+              <Typography variant="h5">
+                Village roles ({villagerCount}){" "}
+              </Typography>
             </Grid>
             {Object.entries(villageRoles).map(([role, count]) => (
               <Grid item key={role}>
@@ -202,7 +216,7 @@ function App() {
           </Grid>
         </Grid>
         <Grid item className="three-column">
-          <Typography variant="h2">People ({players})</Typography>
+          <Typography variant="h4">People ({players})</Typography>
           <Grid container className="people-names" direction="column">
             {new Array(players).fill("").map((p, i) => (
               <TextField
@@ -212,7 +226,6 @@ function App() {
                 onChange={(e) => {
                   const newPlayerNames = playerNames;
                   newPlayerNames[i] = e.target.value;
-
                   setPlayerNames(newPlayerNames);
                 }}
               />
@@ -226,13 +239,42 @@ function App() {
           </Grid>
         </Grid>
         <Grid item className="three-column">
-          <Typography variant="h2">Allocation</Typography>
+          <Typography variant="h4">Allocation</Typography>
           <Grid container className="roles" direction="column">
             {allocation.map((role, i) => (
               <Grid item key={i}>
-                {playerNames[i]} - {role}
+                {playerNames[i]} - {role.allotedRole}
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setAllocation([
+                      ...allocation.slice(0, i),
+                      { ...role, alive: !role.alive },
+                      ...allocation.slice(i + 1),
+                    ]);
+                  }}>
+                  {role.alive === true ? (
+                    <CheckCircleOutlineIcon />
+                  ) : (
+                    <CancelIcon />
+                  )}
+                </IconButton>
               </Grid>
             ))}
+          </Grid>
+          <Typography variant="h4">Narrator Notes</Typography>
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="flex-start">
+            {uniqueAvailableRoles
+              .filter((role) => roleDescriptions[role].narrator !== "")
+              .map((role, i) => (
+                <Grid item key={i}>
+                  <strong>{role}</strong> - {roleDescriptions[role].narrator}
+                </Grid>
+              ))}
           </Grid>
         </Grid>
       </Grid>

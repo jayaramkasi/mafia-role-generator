@@ -1,0 +1,82 @@
+{
+  "kamikaze": {
+    "description": "[MAFIA] [DAY] Also called suicide-bomber. During voting round, kamikaze can kill themselves and take down another person with them. Voting is cancelled, and two deaths are recorded.",
+    "role": "During the day, announce suicide bombing in progress and tell who is the target",
+    "narrator": ""
+  },
+  "framer": {
+    "description": "[MAFIA] Also called forger. Assigns a person to be framed that night. If cop checks that person, narrator is supposed to say Mafia. ",
+    "role": "At night, Tell who to frame",
+    "narrator": "During night, ask who to frame and note down. If cop asks about that person, say Mafia"
+  },
+  "silencer": {
+    "description": "[MAFIA] Assigns a person to be silenced during the day.",
+    "role": "At night, tell who to silence",
+    "narrator": "During night, ask who to silence and note down. During the day, announce who is silenced. If Doc visited that person, silencing doesn't work"
+  },
+  "godfather": {
+    "description": "[MAFIA] If cop checks this person, Narrator has to say Villager.",
+    "role": "Behave like normal mafia. But be aware that cop check with show villager",
+    "narrator": "If cop asks about Godfather, say Villager"
+  },
+  "mafia": {
+    "description": "[MAFIA] Generic mafia role",
+    "role": "Generic mafia role",
+    "narrator": "Generic mafia role"
+  },
+  "idiot": {
+    "description": "[NEUTRAL] Wins if voted out during the day. Loses if survives or killed by Mafia. ",
+    "role": "Try to get voted out during the day",
+    "narrator": "Announce if killed during the night"
+  },
+  "deputy": {
+    "description": "[VILLAGE] Arrests someone during the night. They cannot vote next day, but can participate in discussion.",
+    "role": "During night, tell who to arrest",
+    "narrator": "Note down who is under arrest at night"
+  },
+  "granny": {
+    "description": "[VILLAGE] Anyone who points to granny at night dies. If Mafia points, closest mafia dies. ",
+    "role": "",
+    "narrator": "At the end of night round, check who all have visited granny. Everyone dies. If mafia tries to kill granny at night, kill the closest mafia"
+  },
+  "creep": {
+    "description": "[VILLAGE] Can check one person, and know the closest person who visited them that night. Must be the last role checked during the night. ",
+    "role": "During night, tell a person to stalk. You'll know 1 or each person who visited them. ",
+    "narrator": "during night round, ask about this role last."
+  },
+  "gravedigger": {
+    "description": "[VILLAGE] Can speak to dead people and revive them at night, but have to sacrifice themselves. ",
+    "role": "During night, tell which dead person is to be revived",
+    "narrator": "During night, ask who is to be revived. If killed during the same night, revival doesn't count"
+  },
+  "sniper": {
+    "description": "[VILLAGE] Can kill a person during the night. Sided with village ",
+    "role": "During night, tell who is to be sniped",
+    "narrator": "If snipe is on granny, kill sniper. or kill person, unless saved by the doc."
+  },
+  "bulletproof": {
+    "description": "[VILLAGE] Has two lives if Mafia kill at night. Dies if voted out",
+    "role": "",
+    "narrator": "Check if person who is dying at night is bulletproof. In which case, announce nobody died (Bulletproof). "
+  },
+  "doc": {
+    "description": "[VILLAGE] Can save a person at night (including themselves). Killed if tries to save granny.",
+    "role": "During night, ask who is to be saved.",
+    "narrator": "Check if person dying(killed by mafia/sniper) is saved by the doc. Check if doc is visiting granny."
+  },
+  "cop": {
+    "description": "[VILLAGE] Investigates a person, and narrator tells mafia/village according to role, unless Framed/Godfather. Dies at night if they visit Granny ",
+    "role": "At night, ask who to investigate",
+    "narrator": "Mafia if the person is mafia/framed by framer. Villager if Godfather/otherwise"
+  },
+  "twins": {
+    "description": "[VILLAGE] Knows another villager. ",
+    "role": "",
+    "narrator": ""
+  },
+  "simple": {
+    "description": "[VILLAGE] Generic villager role",
+    "role": "",
+    "narrator": ""
+  }
+}
