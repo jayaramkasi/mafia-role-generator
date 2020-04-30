@@ -3,6 +3,8 @@ import {
   UPDATE_VILLAGE_ROLES,
   UPDATE_PLAYER_NAMES,
   UPDATE_ALLOCATION,
+  UPDATE_PLAYER_CHANNELS,
+  UPDATE_SLACK_API_KEY,
 } from "../constants";
 
 export const updateMafia = (mafiaRoles) => ({
@@ -23,4 +25,14 @@ export const updatePlayers = (playerNames) => ({
 export const updateAllocation = (allocation) => ({
   type: UPDATE_ALLOCATION,
   payload: { allocation },
+});
+
+export const updatePlayerChannels = (playerChannels) => ({
+  type: UPDATE_PLAYER_CHANNELS,
+  payload: { playerChannels },
+});
+
+export const updateSlackKey = (slackAPIKey) => ({
+  type: UPDATE_SLACK_API_KEY,
+  payload: { slackAPIKey },
 });

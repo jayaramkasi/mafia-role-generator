@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { withRouter } from "react-router-dom";
 import {
   updateMafia,
   updateVillage,
@@ -17,6 +18,7 @@ import {
 import { makeStyles } from "@material-ui/styles";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 import roleDescriptions from "../../roleDescriptions.json";
 
@@ -38,10 +40,12 @@ function shuffle(a) {
 const useStyles = makeStyles(() => ({
   column: {
     margin: "30px 10px",
+    width: "300px",
+    maxWidth: "30%",
   },
 }));
 
-export default function GameDesignPage(props) {
+export default withRouter(function GameDesignPage(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const mafiaRoles = useSelector((state) => state.mafiaRoles),
@@ -92,11 +96,12 @@ export default function GameDesignPage(props) {
           alive: true,
           allotedRole,
           type: roleDescriptions[allotedRole].type,
+          hook: "",
         });
         shuffledRoles.splice(allotedRoleIndex, 1);
       }
-      console.log(allotedRoles);
       dispatch(updateAllocation(allotedRoles));
+      props.history.push("/game");
     }
   };
   const roleDisplay = (roleObject, roleUpdateFn) =>
@@ -220,6 +225,30 @@ Master notes: ${narrator}
           </Button>
         </Grid>
       </Grid>
+      <Grid item className={classes.column}>
+        <Typography variant="h4">Narrator Notes</Typography>
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          alignItems="flex-start">
+          {uniqueAvailableRoles
+            .filter((role) => roleDescriptions[role].narrator !== "")
+            .map((role, i) => (
+              <Grid item key={i}>
+                <strong>{role}</strong> - {roleDescriptions[role].narrator}
+              </Grid>
+            ))}
+        </Grid>
+      </Grid>
+      <Grid item>
+        <IconButton
+          onClick={() => {
+            props.history.push("/game");
+          }}>
+          <ChevronRightIcon />
+        </IconButton>
+      </Grid>
     </Grid>
   );
-}
+});

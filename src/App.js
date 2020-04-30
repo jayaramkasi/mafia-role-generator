@@ -22,6 +22,7 @@ import "firebase/performance";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import GameDesignPage from "./pages/GameDesignPage";
+import GameManagementPage from "./pages/GameManagementPage";
 
 //Shuffle an array (stackoverflow)
 function shuffle(a) {
@@ -102,6 +103,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/design" component={GameDesignPage} />
+          <Route exact path="/game" component={GameManagementPage} />
         </Switch>
         {/*<Typography variant="h2">Mafia role allocator</Typography>
       <Grid

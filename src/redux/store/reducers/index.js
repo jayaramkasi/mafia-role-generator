@@ -3,6 +3,8 @@ import {
   UPDATE_VILLAGE_ROLES,
   UPDATE_PLAYER_NAMES,
   UPDATE_ALLOCATION,
+  UPDATE_PLAYER_CHANNELS,
+  UPDATE_SLACK_API_KEY,
 } from "../../constants";
 
 const initialState = {
@@ -28,6 +30,8 @@ const initialState = {
   },
   playerNames: [],
   allocation: [],
+  playerChannelNames: [],
+  slackAPIKey: "",
 };
 
 const rootReducer = (state = initialState, action) =>
@@ -36,6 +40,8 @@ const rootReducer = (state = initialState, action) =>
     UPDATE_PLAYER_NAMES,
     UPDATE_VILLAGE_ROLES,
     UPDATE_ALLOCATION,
+    UPDATE_PLAYER_CHANNELS,
+    UPDATE_SLACK_API_KEY,
   ].includes(action.type)
     ? { ...state, ...action.payload }
     : state;
