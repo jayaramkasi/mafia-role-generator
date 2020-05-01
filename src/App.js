@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import {
   Grid,
   Typography,
   IconButton,
   TextField,
   Button,
+  Paper,
 } from "@material-ui/core";
 
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
@@ -19,6 +20,9 @@ import firebase from "firebase";
 import "firebase/performance";
 
 import "./App.css";
+import HomePage from "./pages/HomePage";
+import GameDesignPage from "./pages/GameDesignPage";
+import GameManagementPage from "./pages/GameManagementPage";
 
 //Shuffle an array (stackoverflow)
 function shuffle(a) {
@@ -82,96 +86,6 @@ function App() {
 
   const uniqueAvailableRoles = [...new Set(availableRoles)];
 
-  const roleDisplay = (roleObject, roleUpdateFn) =>
-    Object.entries(roleObject).map(([role, count]) => (
-      <Grid
-        item
-        key={role}
-        style={{ width: "100%", borderBottom: "1px dashed #a3a3a3" }}>
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          alignItems="center">
-          <Grid
-            item
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              const { description, player, narrator } = roleDescriptions[role];
-
-              window.alert(`Role : ${role}
-Description: ${description}   
-Player notes: ${player} 
-Master notes: ${narrator}
-            `);
-            }}>
-            {role}
-          </Grid>
-          <Grid item>
-            <Grid container>
-              <IconButton
-                disabled={count === 0}
-                size="small"
-                onClick={() => {
-                  roleUpdateFn({
-                    ...roleObject,
-                    [role]: count - 1,
-                  });
-                }}>
-                <ArrowDownwardIcon />
-              </IconButton>
-              <Typography
-                variant="body1"
-                color={count === 0 ? "inherit" : "secondary"}>
-                {count}
-              </Typography>
-              <IconButton
-                size="small"
-                onClick={() => {
-                  roleUpdateFn({
-                    ...roleObject,
-                    [role]: count + 1,
-                  });
-                }}>
-                <ArrowUpwardIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    ));
-
-  const handleAllocate = () => {
-    if (players !== playerNames.filter((name) => name !== "").length)
-      window.alert("Enter all player names or remove roles");
-    else if (players < 5) window.alert("Need minimum of 5 players. ");
-    else if (players === 0) window.alert("Add some roles");
-    else {
-      firebase.analytics().logEvent("add_to_cart");
-      // Can allocate
-
-      // Shuffle
-      let shuffledRoles = shuffle(availableRoles);
-      console.log(shuffledRoles);
-      let allotedRoles = [];
-      // allocate
-      for (let i = 0; i < players; i++) {
-        const countRolesLeft = shuffledRoles.length;
-        const random = Math.random();
-        const allotedRoleIndex = Math.floor(random * countRolesLeft);
-        const allotedRole = shuffledRoles[allotedRoleIndex];
-
-        allotedRoles.push({
-          alive: true,
-          allotedRole,
-          type: roleDescriptions[allotedRole].type,
-        });
-        shuffledRoles.splice(allotedRoleIndex, 1);
-      }
-      setAllocation(allotedRoles);
-    }
-  };
-
   useEffect(() => {
     trace.stop();
   }, []);
@@ -184,8 +98,14 @@ Master notes: ${narrator}
     ).length;
 
   return (
-    <Grid className="App" container direction="column" alignItems="center">
-      <Typography variant="h2">Mafia role allocator</Typography>
+    <BrowserRouter>
+      <Grid className="App" container direction="column" alignItems="center">
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/design" component={GameDesignPage} />
+          <Route exact path="/game" component={GameManagementPage} />
+        </Switch>
+        {/*<Typography variant="h2">Mafia role allocator</Typography>
       <Grid
         container
         direction="row"
@@ -301,8 +221,9 @@ Master notes: ${narrator}
               ))}
           </Grid>
         </Grid>
+              </Grid>*/}
       </Grid>
-    </Grid>
+    </BrowserRouter>
   );
 }
 
