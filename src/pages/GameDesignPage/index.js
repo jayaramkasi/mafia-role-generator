@@ -5,7 +5,7 @@ import {
   updateMafia,
   updateVillage,
   updatePlayers,
-  updateAllocation,
+  updateAllocation
 } from "../../redux/actions";
 
 import {
@@ -13,7 +13,7 @@ import {
   Typography,
   IconButton,
   TextField,
-  Button,
+  Button
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
@@ -39,17 +39,24 @@ function shuffle(a) {
 
 const useStyles = makeStyles(() => ({
   column: {
-    margin: "30px 10px",
+    margin: "40px 10px",
     width: "300px",
-    maxWidth: "30%",
+    maxWidth: "90%"
   },
+  roleDisplayParent: {
+    margin: "20px 0px"
+  },
+  roleDisplay: {
+    width: "100%",
+    borderBottom: "1px dashed #a3a3a3"
+  }
 }));
 
 export default withRouter(function GameDesignPage(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const mafiaRoles = useSelector((state) => state.mafiaRoles),
-    villageRoles = useSelector((state) => state.villageRoles),
+  const mafiaRoles = useSelector(state => state.mafiaRoles),
+    villageRoles = useSelector(state => state.villageRoles),
     mafiaCount = Object.values(mafiaRoles).reduce(
       (sum, value) => sum + value,
       0
@@ -58,13 +65,13 @@ export default withRouter(function GameDesignPage(props) {
       (sum, value) => sum + value,
       0
     ),
-    playerNames = useSelector((state) => state.playerNames);
+    playerNames = useSelector(state => state.playerNames);
   const players = mafiaCount + villagerCount;
 
   const allRoles = { ...mafiaRoles, ...villageRoles };
 
   const availableRoles = Object.entries(allRoles)
-    .filter(([role, count]) => count > 0)
+    .filter(([, count]) => count > 0)
     .reduce((roleArray, [role, count]) => {
       for (let i = 0; i < count; i++) roleArray.push(role);
       return roleArray;
@@ -73,7 +80,7 @@ export default withRouter(function GameDesignPage(props) {
   const uniqueAvailableRoles = [...new Set(availableRoles)];
 
   const handleAllocate = () => {
-    if (players !== playerNames.filter((name) => name !== "").length)
+    if (players !== playerNames.filter(name => name !== "").length)
       window.alert("Enter all player names or remove roles");
     else if (players < 5) window.alert("Need minimum of 5 players. ");
     else if (players === 0) window.alert("Add some roles");
@@ -96,7 +103,7 @@ export default withRouter(function GameDesignPage(props) {
           alive: true,
           allotedRole,
           type: roleDescriptions[allotedRole].type,
-          hook: "",
+          hook: ""
         });
         shuffledRoles.splice(allotedRoleIndex, 1);
       }
@@ -106,10 +113,7 @@ export default withRouter(function GameDesignPage(props) {
   };
   const roleDisplay = (roleObject, roleUpdateFn) =>
     Object.entries(roleObject).map(([role, count]) => (
-      <Grid
-        item
-        key={role}
-        style={{ width: "100%", borderBottom: "1px dashed #a3a3a3" }}>
+      <Grid item key={role} className={classes.roleDisplay}>
         <Grid
           container
           direction="row"
@@ -138,7 +142,7 @@ Master notes: ${narrator}
                   dispatch(
                     roleUpdateFn({
                       ...roleObject,
-                      [role]: count - 1,
+                      [role]: count - 1
                     })
                   );
                 }}>
@@ -155,7 +159,7 @@ Master notes: ${narrator}
                   dispatch(
                     roleUpdateFn({
                       ...roleObject,
-                      [role]: count + 1,
+                      [role]: count + 1
                     })
                   );
                 }}>
@@ -183,11 +187,11 @@ Master notes: ${narrator}
           className="roles"
           direction="column"
           alignItems="flex-start">
-          <Grid item>
+          <Grid item className={classes.roleDisplayParent}>
             <Typography variant="h5">Mafia roles ({mafiaCount})</Typography>
           </Grid>
           {roleDisplay(mafiaRoles, updateMafia)}
-          <Grid item>
+          <Grid item className={classes.roleDisplayParent}>
             <Typography variant="h5">
               Village roles ({villagerCount}){" "}
             </Typography>
@@ -205,12 +209,12 @@ Master notes: ${narrator}
               style={{ margin: "5px", width: "300px" }}
               label={`Player :${i + 1}`}
               value={playerNames[i]}
-              onChange={(e) => {
+              onChange={e => {
                 dispatch(
                   updatePlayers([
                     ...playerNames.slice(0, i),
                     e.target.value,
-                    ...playerNames.slice(i + 1),
+                    ...playerNames.slice(i + 1)
                   ])
                 );
               }}
@@ -233,7 +237,7 @@ Master notes: ${narrator}
           justify="flex-start"
           alignItems="flex-start">
           {uniqueAvailableRoles
-            .filter((role) => roleDescriptions[role].narrator !== "")
+            .filter(role => roleDescriptions[role].narrator !== "")
             .map((role, i) => (
               <Grid item key={i}>
                 <strong>{role}</strong> - {roleDescriptions[role].narrator}
