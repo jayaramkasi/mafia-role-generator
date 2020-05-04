@@ -30,8 +30,8 @@
     "narrator": ""
   },
   "idiot": {
-    "type": "V",
-    "description": "[NEUTRAL] Wins if voted out during the day. Loses if survives or killed by Mafia. ",
+    "type": "N",
+    "description": "[NEUTRAL] Wins if voted out during the day. Loses if survives or killed by Mafia, or mafia win. ",
     "player": "Try to get voted out during the day",
     "narrator": "Announce if killed during the night"
   },
