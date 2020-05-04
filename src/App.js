@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     trace.stop();
-  }, []);
+  }, [trace]);
 
   return (
     <BrowserRouter>
