@@ -26,6 +26,7 @@ export default withRouter(function GameManagementPage(props) {
     <Grid
       container
       direction="row"
+      style={{ padding: "10px", maxWidth: "100%" }}
       justify="flex-start"
       align-items="flex-start">
       <IconButton onClick={() => props.history.push("/design")}>
@@ -49,59 +50,64 @@ export default withRouter(function GameManagementPage(props) {
               key={i}
               style={{
                 border: "1px dashed a3a3a3",
-                padding: "5px",
+                padding: "10px",
                 textAlign: "justify",
                 color: role.type === "M" ? "red" : "black",
                 textDecoration: role.alive || "line-through"
               }}>
-              <Typography variant="body1">
-                {playerNames[i]} - {role.allotedRole}
-              </Typography>
+              <Grid container direction="row">
+                <Typography
+                  variant="h6"
+                  style={{ width: "400px", maxWidth: "100%" }}>
+                  {playerNames[i]} - {role.allotedRole}
+                </Typography>
 
-              <IconButton
-                size="small"
-                onClick={() => {
-                  dispatch(
-                    updateAllocation([
-                      ...allocation.slice(0, i),
-                      { ...role, alive: !role.alive },
-                      ...allocation.slice(i + 1)
-                    ])
-                  );
-                }}>
-                {role.alive === true ? (
-                  <CheckCircleOutlineIcon />
-                ) : (
-                  <CancelIcon />
-                )}
-              </IconButton>
-              <TextField
-                value={role.hook}
-                label={`Hook for ${playerNames[i]}`}
-                onChange={e => {
-                  dispatch(
-                    updateAllocation([
-                      ...allocation.slice(0, i),
-                      { ...role, hook: e.target.value },
-                      ...allocation.slice(i + 1)
-                    ])
-                  );
-                }}
-              />
-              <IconButton
-                onClick={() => {
-                  fetch(role.hook, {
-                    method: "POST",
-                    body: JSON.stringify({
-                      text: `Your Role: ${role.allotedRole}. Note: ${
-                        roleDescriptions[role.allotedRole].player
-                      }
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    dispatch(
+                      updateAllocation([
+                        ...allocation.slice(0, i),
+                        { ...role, alive: !role.alive },
+                        ...allocation.slice(i + 1)
+                      ])
+                    );
+                  }}>
+                  {role.alive === true ? (
+                    <CheckCircleOutlineIcon />
+                  ) : (
+                    <CancelIcon />
+                  )}
+                </IconButton>
+                <TextField
+                  value={role.hook}
+                  label={`Hook for ${playerNames[i]}`}
+                  onChange={e => {
+                    dispatch(
+                      updateAllocation([
+                        ...allocation.slice(0, i),
+                        { ...role, hook: e.target.value },
+                        ...allocation.slice(i + 1)
+                      ])
+                    );
+                  }}
+                />
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    fetch(role.hook, {
+                      method: "POST",
+                      body: JSON.stringify({
+                        text: `Your Role: ${role.allotedRole}. Note: ${
+                          roleDescriptions[role.allotedRole].player
+                        }
                       `
-                    })
-                  }).then(response => response.json());
-                }}>
-                <SendIcon />
-              </IconButton>
+                      })
+                    }).then(response => response.json());
+                  }}>
+                  <SendIcon />
+                </IconButton>
+              </Grid>
             </Grid>
           ))}
         </Grid>
