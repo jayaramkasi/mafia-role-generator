@@ -8,6 +8,7 @@ const useStyles = makeStyles(() => ({
     margin: "30px 0px"
   },
   page: {
+    cursor: "pointer",
     margin: "5px",
     width: "300px",
     maxWidth: "100%",
@@ -21,13 +22,14 @@ export default withRouter(function HomePage(props) {
 
   const pagePaper = (route, title, description) => (
     <Paper
+      elevation={3}
       style={{ textAlign: "left" }}
       className={classes.page}
       onClick={() => {
         props.history.push(route);
       }}>
       <Typography variant="h3">{title}</Typography>
-      <Typography variant="p">{description}</Typography>
+      <Typography variant="body1">{description}</Typography>
     </Paper>
   );
 
@@ -43,6 +45,7 @@ export default withRouter(function HomePage(props) {
         "Game setup -> enter roles & player names & click allocate button"
       )}
       {pagePaper("/roles", "Roles", "Description of all roles")}
+      {pagePaper("/howtoplay", "How to play", "Details on how to use this app")}
     </Grid>
   );
 });

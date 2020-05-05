@@ -1,5 +1,7 @@
 import React from "react";
 
+import NavigationLinks from "../../components/NavigationLinks";
+
 import roleDescriptions from "../../roleDescriptions.json";
 import { Grid, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -17,7 +19,7 @@ export default function RolesPage(props) {
   const roleDescription = (key, value) => (
     <Grid item>
       <Paper className={classes.rolePaper}>
-        <Typography variant="h3">{key}</Typography>
+        <Typography variant="h5">{key}</Typography>
         <Typography variant="body1">Team: {value.type}</Typography>
         <Typography variant="body1">
           Description: {value.description}
@@ -29,6 +31,7 @@ export default function RolesPage(props) {
   );
   return (
     <Grid container direction="column">
+      <NavigationLinks />
       {Object.entries(roleDescriptions).map(([key, value]) =>
         roleDescription(key, value)
       )}
