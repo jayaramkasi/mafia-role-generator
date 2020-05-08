@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { showToast } from "../../redux/actions";
+import { showAlert } from "../../redux/actions";
 
 import { withRouter } from "react-router-dom";
 import {
@@ -72,12 +72,12 @@ export default withRouter(function GameDesignPage(props) {
     e.preventDefault();
     if (playerNames.length !== players)
       dispatch(
-        showToast("Enter all player names or remove roles", true, "Error")
+        showAlert("Enter all player names or remove roles", true, "Error")
       );
     else if (players < 5)
-      dispatch(showToast("Need minimum of 5 players.", true, "Error"));
+      dispatch(showAlert("Need minimum of 5 players.", true, "Error"));
     else if (players === 0)
-      dispatch(showToast("Add some roles", true, "Error"));
+      dispatch(showAlert("Add some roles", true, "Error"));
     else {
       firebase.analytics().logEvent("add_to_cart");
 
@@ -115,7 +115,7 @@ export default withRouter(function GameDesignPage(props) {
               ];
 
               dispatch(
-                showToast(
+                showAlert(
                   <>
                     <p>Type: {type} </p>
                     <p>Description: {description}</p>

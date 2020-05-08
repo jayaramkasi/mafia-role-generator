@@ -4,8 +4,8 @@ import {
   UPDATE_PLAYER_NAMES,
   UPDATE_ALLOCATION,
   UPDATE_PLAYER_CHANNELS,
-  SHOW_TOAST,
-  HIDE_TOAST
+  SHOW_ALERT,
+  HIDE_ALERT
 } from "../constants";
 
 export const updateMafia = mafiaRoles => ({
@@ -33,22 +33,21 @@ export const updatePlayerChannels = playerChannels => ({
   payload: { playerChannels }
 });
 
-export const showToast = (body, autoHide, header) => ({
-  type: SHOW_TOAST,
+export const showAlert = (body, autoHide, header) => ({
+  type: SHOW_ALERT,
   payload: {
-    toast: {
+    alter: {
       show: true,
-      autoHide,
       header,
       body
     }
   }
 });
 
-export const hideToast = () => ({
-  type: HIDE_TOAST,
+export const hideAlert = () => ({
+  type: HIDE_ALERT,
   payload: {
-    toast: {
+    alert: {
       show: false,
       header: "",
       body: ""

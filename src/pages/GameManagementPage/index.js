@@ -20,7 +20,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import {
   updateAllocation,
   updatePlayers,
-  showToast
+  showAlert
 } from "../../redux/actions";
 
 import roleDescriptions from "../../roleDescriptions.json";
@@ -148,7 +148,7 @@ export default withRouter(function GameManagementPage(props) {
                             })
                           }).then(response => {
                             dispatch(
-                              showToast(
+                              showAlert(
                                 `Alerted ${playerNames[i].name}`,
                                 false,
                                 "Success"

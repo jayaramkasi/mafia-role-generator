@@ -4,8 +4,8 @@ import {
   UPDATE_PLAYER_NAMES,
   UPDATE_ALLOCATION,
   UPDATE_PLAYER_CHANNELS,
-  SHOW_TOAST,
-  HIDE_TOAST
+  SHOW_ALERT,
+  HIDE_ALERT
 } from "../../constants";
 
 const initialState = {
@@ -31,9 +31,8 @@ const initialState = {
   },
   playerNames: [],
   allocation: [],
-  toast: {
+  alert: {
     show: false,
-    autoHide: true,
     header: "",
     body: ""
   }
@@ -46,8 +45,8 @@ const rootReducer = (state = initialState, action) =>
     UPDATE_VILLAGE_ROLES,
     UPDATE_ALLOCATION,
     UPDATE_PLAYER_CHANNELS,
-    SHOW_TOAST,
-    HIDE_TOAST
+    SHOW_ALERT,
+    HIDE_ALERT
   ].includes(action.type)
     ? { ...state, ...action.payload }
     : state;
