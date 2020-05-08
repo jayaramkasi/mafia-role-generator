@@ -4,35 +4,54 @@ import {
   UPDATE_PLAYER_NAMES,
   UPDATE_ALLOCATION,
   UPDATE_PLAYER_CHANNELS,
-  UPDATE_SLACK_API_KEY,
+  SHOW_TOAST,
+  HIDE_TOAST
 } from "../constants";
 
-export const updateMafia = (mafiaRoles) => ({
+export const updateMafia = mafiaRoles => ({
   type: UPDATE_MAFIA_ROLES,
-  payload: { mafiaRoles },
+  payload: { mafiaRoles }
 });
 
-export const updateVillage = (villageRoles) => ({
+export const updateVillage = villageRoles => ({
   type: UPDATE_VILLAGE_ROLES,
-  payload: { villageRoles },
+  payload: { villageRoles }
 });
 
-export const updatePlayers = (playerNames) => ({
+export const updatePlayers = playerNames => ({
   type: UPDATE_PLAYER_NAMES,
-  payload: { playerNames },
+  payload: { playerNames }
 });
 
-export const updateAllocation = (allocation) => ({
+export const updateAllocation = allocation => ({
   type: UPDATE_ALLOCATION,
-  payload: { allocation },
+  payload: { allocation }
 });
 
-export const updatePlayerChannels = (playerChannels) => ({
+export const updatePlayerChannels = playerChannels => ({
   type: UPDATE_PLAYER_CHANNELS,
-  payload: { playerChannels },
+  payload: { playerChannels }
 });
 
-export const updateSlackKey = (slackAPIKey) => ({
-  type: UPDATE_SLACK_API_KEY,
-  payload: { slackAPIKey },
+export const showToast = (body, autoHide, header) => ({
+  type: SHOW_TOAST,
+  payload: {
+    toast: {
+      show: true,
+      autoHide,
+      header,
+      body
+    }
+  }
+});
+
+export const hideToast = () => ({
+  type: HIDE_TOAST,
+  payload: {
+    toast: {
+      show: false,
+      header: "",
+      body: ""
+    }
+  }
 });

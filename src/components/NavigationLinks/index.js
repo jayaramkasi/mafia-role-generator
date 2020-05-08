@@ -1,42 +1,41 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
-import { Grid, IconButton } from "@material-ui/core";
-import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
-import HelpIcon from "@material-ui/icons/Help";
-import GroupIcon from "@material-ui/icons/Group";
+import { withRouter, Link } from "react-router-dom";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle, faUsers } from "@fortawesome/free-solid-svg-icons";
+
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 
 export default withRouter(function NavigationLinks(props) {
-  const navigationButton = (icon, to) => (
-    <Grid item>
-      <IconButton
-        size="medium"
-        color="primary"
-        onClick={() => {
-          props.history.push(to);
-        }}>
-        {icon}
-      </IconButton>
-    </Grid>
-  );
-
   return (
-    <Grid
-      container
-      direction="row"
-      justify="flex-start"
-      style={{ padding: "15px" }}>
-      {navigationButton(
-        <HomeRoundedIcon color="primary" titleAccess="Home screen" />,
-        "/"
-      )}
-      {navigationButton(
-        <HelpIcon color="primary" titleAccess="How to play" />,
-        "/howtoplay"
-      )}
-      {navigationButton(
-        <GroupIcon color="primary" titleAccess="How to play" />,
-        "/roles"
-      )}
-    </Grid>
+    <Navbar
+      fixed="top"
+      collapseOnSelect
+      expand="lg"
+      bg="dark"
+      variant="dark"
+      style={{ padding: "0px" }}>
+      <Navbar.Brand>
+        <Link to="/">Mafia role allocator</Link>
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav className="mr-auto" activeKey="/">
+          <Nav.Item className="main-nav-item">
+            <Link to="/howtoplay">
+              <FontAwesomeIcon icon={faInfoCircle} className="nav-item-icon" />
+              How to play
+            </Link>
+          </Nav.Item>
+          <Nav.Item className="main-nav-item">
+            <Link to="/roles">
+              <FontAwesomeIcon icon={faUsers} className="nav-item-icon" />
+              Roles
+            </Link>
+          </Nav.Item>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 });

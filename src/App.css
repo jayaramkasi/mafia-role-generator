@@ -2,28 +2,19 @@
   width: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.main-nav-item {
+  padding: 16px;
+  transition: ease-in-out;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.main-nav-item:hover {
+  transform: scale(1.2);
 }
 
-.App-link {
-  color: #61dafb;
+.nav-item-icon {
+  margin: 0px 8px;
 }
 
-.three-column {
-  width: 400px;
-  max-width: 90%;
-  padding: 20px;
+.count-change:hover {
+  color: "#007bff";
 }

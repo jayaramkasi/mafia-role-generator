@@ -1,40 +1,30 @@
 import React from "react";
 
-import NavigationLinks from "../../components/NavigationLinks";
-
 import roleDescriptions from "../../roleDescriptions.json";
-import { Grid, Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 
-const useStyles = makeStyles(() => ({
-  rolePaper: {
-    margin: "10px",
-    padding: "10px"
-  }
-}));
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
 
 export default function RolesPage(props) {
-  const classes = useStyles();
-
   const roleDescription = (key, value) => (
-    <Grid item>
-      <Paper className={classes.rolePaper}>
-        <Typography variant="h5">{key}</Typography>
-        <Typography variant="body1">Team: {value.type}</Typography>
-        <Typography variant="body1">
-          Description: {value.description}
-        </Typography>
-        <Typography variant="body1">Player note: {value.player}</Typography>
-        <Typography variant="body1">Narrator note: {value.narrator}</Typography>
-      </Paper>
-    </Grid>
+    <Row key={key}>
+      <Card style={{ margin: "5px", width: "100%" }}>
+        <Card.Header>{key}</Card.Header>
+        <Card.Body>
+          <Card.Title>Team: {value.type}</Card.Title>
+          <Card.Text>Description: {value.description}</Card.Text>
+          <Card.Text>Player note: {value.player}</Card.Text>
+          <Card.Text>Narrator note: {value.narrator}</Card.Text>
+        </Card.Body>
+      </Card>
+    </Row>
   );
   return (
-    <Grid container direction="column">
-      <NavigationLinks />
+    <Container>
       {Object.entries(roleDescriptions).map(([key, value]) =>
         roleDescription(key, value)
       )}
-    </Grid>
+    </Container>
   );
 }
