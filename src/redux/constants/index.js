@@ -6,3 +6,5 @@ export const UPDATE_PLAYER_CHANNELS = "UPDATE_PLAYER_CHANNELS";
 export const UPDATE_SLACK_API_KEY = "UPDATE_SLACK_KEY";
 export const SHOW_ALERT = "SHOW_ALERT";
 export const HIDE_ALERT = "HIDE_ALERT";
+export const SHOW_TOAST = "SHOW_TOAST";
+export const HIDE_TOAST = "HIDE_TOAST";

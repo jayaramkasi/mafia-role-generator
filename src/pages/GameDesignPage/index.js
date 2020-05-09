@@ -13,6 +13,7 @@ import {
 import {
   faChevronUp,
   faChevronDown,
+  faChevronRight,
   faAngleDoubleUp,
   faAngleDoubleDown
 } from "@fortawesome/free-solid-svg-icons";
@@ -71,13 +72,10 @@ export default withRouter(function GameDesignPage(props) {
   const handleAllocate = e => {
     e.preventDefault();
     if (playerNames.length !== players)
-      dispatch(
-        showAlert("Enter all player names or remove roles", true, "Error")
-      );
+      dispatch(showAlert("Enter all player names or remove roles", "Error"));
     else if (players < 5)
-      dispatch(showAlert("Need minimum of 5 players.", true, "Error"));
-    else if (players === 0)
-      dispatch(showAlert("Add some roles", true, "Error"));
+      dispatch(showAlert("Need minimum of 5 players.", "Error"));
+    else if (players === 0) dispatch(showAlert("Add some roles", "Error"));
     else {
       firebase.analytics().logEvent("add_to_cart");
 
@@ -136,13 +134,17 @@ export default withRouter(function GameDesignPage(props) {
                 margin: "4px 0px 4px 16px",
                 color: count === 0 ? "#a3a3a3" : "inherit"
               }}
-              icon={role === "twins" ? faAngleDoubleDown : faChevronDown}
+              icon={
+                role === "twins" && count === 2
+                  ? faAngleDoubleDown
+                  : faChevronDown
+              }
               onClick={() => {
                 if (count !== 0) {
                   dispatch(
                     roleUpdateFn({
                       ...roleObject,
-                      [role]: count - (role === "twins" ? 2 : 1)
+                      [role]: count - (role === "twins" && count === 2 ? 2 : 1)
                     })
                   );
                 }
@@ -160,12 +162,14 @@ export default withRouter(function GameDesignPage(props) {
 
             <FontAwesomeIcon
               style={{ width: "20px", margin: "4px 0px 4px 16px" }}
-              icon={role === "twins" ? faAngleDoubleUp : faChevronUp}
+              icon={
+                role === "twins" && count === 0 ? faAngleDoubleUp : faChevronUp
+              }
               onClick={() => {
                 dispatch(
                   roleUpdateFn({
                     ...roleObject,
-                    [role]: count + (role === "twins" ? 2 : 1)
+                    [role]: count + (role === "twins" && count === 0 ? 2 : 1)
                   })
                 );
               }}
@@ -176,70 +180,73 @@ export default withRouter(function GameDesignPage(props) {
     ));
 
   return (
-    <Container>
-      <Row>
-        <Col sm={11}>
-          <Container>
-            <Row>
-              <Col sm={4}>
-                <h1>Roles</h1>
-                <p>Click on individual roles to popup details</p>
-                <h3>Mafia roles ({mafiaCount})</h3>
-                {roleDisplay(mafiaRoles, updateMafia)}
-                <h3 style={{ marginTop: "20px" }}>
-                  Village roles ({villagerCount})
-                </h3>
-                {roleDisplay(villageRoles, updateVillage)}
-              </Col>
-              <Col sm={4}>
-                <h1 style={{ marginBottom: "30px" }}>People ({players})</h1>
-                <Form>
-                  {dummyArray.map((p, i) => (
-                    <Form.Control
-                      key={i}
-                      required
-                      size="lg"
-                      type="text"
-                      style={{ margin: "20px" }}
-                      placeholder={`Enter name for player ${i + 1}`}
-                      value={playerNames[i] ? playerNames[i].name : ""}
-                      onChange={e => {
-                        dispatch(
-                          updatePlayers([
-                            ...playerNames.slice(0, i),
-                            { ...playerNames[i], name: e.target.value },
-                            ...playerNames.slice(i + 1)
-                          ])
-                        );
-                      }}
-                    />
-                  ))}
-                  <Button
-                    type="submit"
-                    onClick={handleAllocate}
-                    style={{ margin: "20px", width: "100%" }}>
-                    Allocate!
-                  </Button>
-                </Form>
-              </Col>
-              <Col sm={4}>
-                <span>
-                  <h1>Narrator notes </h1>
-                </span>
-
-                {uniqueAvailableRoles
-                  .filter(role => roleDescriptions[role].narrator !== "")
-                  .map((role, i) => (
-                    <p key={i}>
-                      <strong>{role} </strong> -
-                      {roleDescriptions[role].narrator}
-                    </p>
-                  ))}
-              </Col>
-            </Row>
-          </Container>
+    <>
+      <Row style={{ width: "100%" }} className="d-flex justify-content-end">
+        <Col className="d-flex justify-content-end">
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            size="3x"
+            style={{ marginRight: "16px" }}
+            onClick={() => {
+              props.history.push("/game");
+            }}
+          />
         </Col>
       </Row>
-    </Container>
+      <Row>
+        <Col sm={4}>
+          <h1>Roles</h1>
+          <p>Click on individual roles to popup details</p>
+          <h3>Mafia roles ({mafiaCount})</h3>
+          {roleDisplay(mafiaRoles, updateMafia)}
+          <h3 style={{ marginTop: "20px" }}>Village roles ({villagerCount})</h3>
+          {roleDisplay(villageRoles, updateVillage)}
+        </Col>
+        <Col sm={4}>
+          <h1 style={{ marginBottom: "30px" }}>People ({players})</h1>
+          <Form>
+            {dummyArray.map((p, i) => (
+              <Form.Control
+                key={i}
+                required
+                size="lg"
+                type="text"
+                style={{ marginTop: "20px" }}
+                placeholder={`Enter name for player ${i + 1}`}
+                value={playerNames[i] ? playerNames[i].name : ""}
+                onChange={e => {
+                  dispatch(
+                    updatePlayers([
+                      ...playerNames.slice(0, i),
+                      { ...playerNames[i], name: e.target.value },
+                      ...playerNames.slice(i + 1)
+                    ])
+                  );
+                }}
+              />
+            ))}
+            <Button
+              type="submit"
+              onClick={handleAllocate}
+              style={{ marginTop: "20px", width: "100%" }}>
+              Allocate!
+            </Button>
+          </Form>
+        </Col>
+        <Col sm={4}>
+          <span>
+            <h1>Narrator notes </h1>
+          </span>
+
+          {uniqueAvailableRoles
+            .filter(role => roleDescriptions[role].narrator !== "")
+            .map((role, i) => (
+              <p key={i}>
+                <strong>{role} </strong> -{roleDescriptions[role].narrator}
+              </p>
+            ))}
+        </Col>
+      </Row>
+    </>
   );
 });

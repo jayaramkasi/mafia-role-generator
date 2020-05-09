@@ -5,7 +5,9 @@ import {
   UPDATE_ALLOCATION,
   UPDATE_PLAYER_CHANNELS,
   SHOW_ALERT,
-  HIDE_ALERT
+  HIDE_ALERT,
+  SHOW_TOAST,
+  HIDE_TOAST
 } from "../../constants";
 
 const initialState = {
@@ -35,6 +37,12 @@ const initialState = {
     show: false,
     header: "",
     body: ""
+  },
+  toast: {
+    variant: "success",
+    show: false,
+    header: "",
+    body: ""
   }
 };
 
@@ -46,7 +54,9 @@ const rootReducer = (state = initialState, action) =>
     UPDATE_ALLOCATION,
     UPDATE_PLAYER_CHANNELS,
     SHOW_ALERT,
-    HIDE_ALERT
+    HIDE_ALERT,
+    SHOW_TOAST,
+    HIDE_TOAST
   ].includes(action.type)
     ? { ...state, ...action.payload }
     : state;
