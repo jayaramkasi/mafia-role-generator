@@ -1,13 +1,27 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateAllocation } from "../../redux/actions";
 
-import { Grid, Typography, TextField, IconButton } from "@material-ui/core";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import CancelIcon from "@material-ui/icons/Cancel";
-import SendIcon from "@material-ui/icons/Send";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import {
+  faCheckCircle,
+  faChevronLeft,
+  faBan,
+  faPaperPlane
+} from "@fortawesome/free-solid-svg-icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+
+import {
+  updateAllocation,
+  updatePlayers,
+  showToast
+} from "../../redux/actions";
 
 import roleDescriptions from "../../roleDescriptions.json";
 
@@ -22,96 +36,159 @@ export default withRouter(function GameManagementPage(props) {
       role => role.type !== "M" || role.allotedRole === "idiot"
     ).length;
 
+  console.log(allocation);
+
   return (
-    <Grid
-      container
-      direction="row"
-      style={{ padding: "10px", maxWidth: "100%" }}
-      justify="flex-start"
-      align-items="flex-start">
-      <IconButton onClick={() => props.history.push("/design")}>
-        <ChevronLeftIcon />
-      </IconButton>
+    <Container>
+      <Row style={{ width: "100%" }} className="d-flex justify-content-start">
+        <Col className="d-flex justify-content-start">
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            size="3x"
+            style={{ marginRight: "16px" }}
+            onClick={() => {
+              props.history.push("/");
+            }}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <h1>Allocation</h1>
+          <h3>
+            Game status - Mafia {mafiaAlive} vs Villagers {villageAlive}
+          </h3>
+          <h3>
+            {mafiaAlive > villageAlive
+              ? "Mafia wins!"
+              : villageAlive > 0 && mafiaAlive === 0 && "Village wins!"}
+          </h3>
+          <Container>
+            {allocation.map((role, i) => (
+              <Row
+                key={i}
+                style={{
+                  margin: "16px",
+                  textDecoration: role.alive || "line-through"
+                }}>
+                <Col>
+                  <span
+                    style={{
+                      color:
+                        role.allotedRole === "godfather"
+                          ? "#FF9800"
+                          : role.type === "M"
+                          ? "#FF0000"
+                          : "inherit"
+                    }}>
+                    {playerNames[i].name} - {role.allotedRole}
+                  </span>
+                  <FontAwesomeIcon
+                    style={{ marginLeft: "16px", cursor: "pointer" }}
+                    icon={role.alive ? faCheckCircle : faBan}
+                    onClick={() => {
+                      dispatch(
+                        updateAllocation([
+                          ...allocation.slice(0, i),
+                          { ...role, alive: !role.alive },
+                          ...allocation.slice(i + 1)
+                        ])
+                      );
+                    }}
+                  />
+                </Col>
+                <Col>
+                  <InputGroup
+                    style={{
+                      margin: "0px 16px",
+                      width: "600px",
+                      maxWidth: "90%"
+                    }}>
+                    <Form.Control
+                      value={playerNames[i].hook || ""}
+                      placeholder={`Hook for ${playerNames[i].name}`}
+                      onChange={e => {
+                        dispatch(
+                          updatePlayers([
+                            ...playerNames.slice(0, i),
+                            { ...playerNames[i], hook: e.target.value },
+                            ...playerNames.slice(i + 1)
+                          ])
+                        );
+                      }}
+                    />
+                    <InputGroup.Append>
+                      <FontAwesomeIcon
+                        icon={faPaperPlane}
+                        style={{ margin: "20px" }}
+                        onClick={async () => {
+                          let otherAlerts = [];
+                          if (role.allotedRole === "twins") {
+                            otherAlerts = allocation
+                              .map((role, index) => ({
+                                ...role,
+                                index
+                              }))
+                              .filter(role => role.allotedRole === "twins");
+                          } else if (role.allotedRole === "cop") {
+                            otherAlerts = allocation
+                              .map((role, index) => ({
+                                ...role,
+                                index
+                              }))
+                              .filter(role => role.allotedRole === "cop");
+                          } else if (role.type === "M") {
+                            otherAlerts = allocation
+                              .map((role, index) => ({
+                                ...role,
+                                index
+                              }))
+                              .filter(role => role.type === "M");
+                          }
 
-      <Grid item>
-        <Typography variant="h4">Allocation </Typography>
-        <Typography variant="h6">
-          Game status - Mafia {mafiaAlive} vs Villagers {villageAlive}
-        </Typography>
-        <Typography variant="caption">
-          {mafiaAlive > villageAlive
-            ? "Mafia wins!"
-            : villageAlive > 0 && mafiaAlive === 0 && "Village wins!"}
-        </Typography>
-        <Grid container className="roles" direction="column">
-          {allocation.map((role, i) => (
-            <Grid
-              item
-              key={i}
-              style={{
-                border: "1px dashed a3a3a3",
-                padding: "10px",
-                textAlign: "justify",
-                color: role.type === "M" ? "red" : "black",
-                textDecoration: role.alive || "line-through"
-              }}>
-              <Grid container direction="row">
-                <Typography
-                  variant="h6"
-                  style={{ width: "400px", maxWidth: "100%" }}>
-                  {playerNames[i]} - {role.allotedRole}
-                </Typography>
-
-                <IconButton
-                  size="small"
-                  onClick={() => {
-                    dispatch(
-                      updateAllocation([
-                        ...allocation.slice(0, i),
-                        { ...role, alive: !role.alive },
-                        ...allocation.slice(i + 1)
-                      ])
-                    );
-                  }}>
-                  {role.alive === true ? (
-                    <CheckCircleOutlineIcon />
-                  ) : (
-                    <CancelIcon />
-                  )}
-                </IconButton>
-                <TextField
-                  value={role.hook}
-                  label={`Hook for ${playerNames[i]}`}
-                  onChange={e => {
-                    dispatch(
-                      updateAllocation([
-                        ...allocation.slice(0, i),
-                        { ...role, hook: e.target.value },
-                        ...allocation.slice(i + 1)
-                      ])
-                    );
-                  }}
-                />
-                <IconButton
-                  size="small"
-                  onClick={() => {
-                    fetch(role.hook, {
-                      method: "POST",
-                      body: JSON.stringify({
-                        text: `Your Role: ${role.allotedRole}. Note: ${
-                          roleDescriptions[role.allotedRole].player
-                        }
+                          if (playerNames[i].hook) {
+                            await fetch(playerNames[i].hook, {
+                              method: "POST",
+                              body: JSON.stringify({
+                                text: `*Your Role: ${
+                                  role.allotedRole
+                                }.* \nNote: ${
+                                  roleDescriptions[role.allotedRole].player
+                                }. ${
+                                  otherAlerts.length > 0 &&
+                                  (role.allotedRole === "twins" ||
+                                    role.type === "M" ||
+                                    role.allotedRole === "cop")
+                                    ? `\nYour known teammates: ${otherAlerts.map(
+                                        mate =>
+                                          `${playerNames[mate.index].name} : ${
+                                            mate.allotedRole
+                                          }`
+                                      )}`
+                                    : ""
+                                }
                       `
-                      })
-                    }).then(response => response.json());
-                  }}>
-                  <SendIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </Grid>
+                              })
+                            }).then(response => {
+                              dispatch(
+                                showToast(
+                                  `Alerted ${playerNames[i].name}`,
+                                  false,
+                                  "Success"
+                                )
+                              );
+                            });
+                          }
+                        }}
+                      />
+                    </InputGroup.Append>
+                  </InputGroup>
+                </Col>
+              </Row>
+            ))}
+          </Container>
+        </Col>
+      </Row>
+    </Container>
   );
 });

@@ -1,16 +1,22 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { Grid, Typography } from "@material-ui/core";
 
 import firebase from "firebase";
 import "firebase/performance";
 
 import "./App.css";
-import HomePage from "./pages/HomePage";
+
 import GameDesignPage from "./pages/GameDesignPage";
 import GameManagementPage from "./pages/GameManagementPage";
 import RolesPage from "./pages/RolesPage";
 import HowToUsePage from "./pages/HowToUsePage";
+
+import NavigationLinks from "./components/NavigationLinks";
+import StopAlert from "./components/StopAlert";
+import ShortToast from "./components/ShortToast";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 
 function App() {
   const perf = firebase.performance();
@@ -23,30 +29,26 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Grid
-        className="App"
-        container
-        direction="column"
-        alignItems="center"
-        style={{ minHeight: "100%" }}>
+      <Container fluid style={{ marginTop: "60px", padding: "10px" }}>
+        <NavigationLinks />
+
         <Switch>
-          <Route exact path="/" component={HomePage} />
+          <Route exact path="/" component={GameDesignPage} />
           <Route exact path="/roles" component={RolesPage} />
-          <Route exact path="/design" component={GameDesignPage} />
           <Route exact path="/game" component={GameManagementPage} />
           <Route exact path="/howtoplay" component={HowToUsePage} />
         </Switch>
-      </Grid>
-      <Grid
-        container
-        style={{
-          bottom: "0",
-          backgroundColor: "#000000",
-          color: "#FFF",
-          padding: "15px"
-        }}>
-        <Typography variant="caption">Built with React.</Typography>
-      </Grid>
+        <Row
+          style={{
+            padding: "15px",
+            backgroundColor: "#000000",
+            color: "#FFFFFF"
+          }}>
+          <p>Built with React. </p>
+        </Row>
+      </Container>
+      <StopAlert />
+      <ShortToast />
     </BrowserRouter>
   );
 }

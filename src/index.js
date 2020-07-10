@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
+
 import App from "./App";
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -18,11 +20,9 @@ firebase.analytics();
 firebase.analytics().logEvent("page_view");
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById("root")
 );
 

@@ -1,5 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { showAlert } from "../../redux/actions";
+
 import { withRouter } from "react-router-dom";
 import {
   updateMafia,
@@ -9,22 +11,24 @@ import {
 } from "../../redux/actions";
 
 import {
-  Grid,
-  Typography,
-  IconButton,
-  TextField,
-  Button
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+  faChevronUp,
+  faChevronDown,
+  faChevronRight,
+  faAngleDoubleUp,
+  faAngleDoubleDown
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 import roleDescriptions from "../../roleDescriptions.json";
 
 import firebase from "firebase";
 import "firebase/performance";
-import NavigationLinks from "../../components/NavigationLinks";
 
 //Shuffle an array (stackoverflow)
 function shuffle(a) {
@@ -38,23 +42,7 @@ function shuffle(a) {
   return a;
 }
 
-const useStyles = makeStyles(() => ({
-  column: {
-    margin: "10px 10px",
-    width: "300px",
-    maxWidth: "90%"
-  },
-  roleDisplayParent: {
-    margin: "20px 0px"
-  },
-  roleDisplay: {
-    width: "100%",
-    borderBottom: "1px dashed #a3a3a3"
-  }
-}));
-
 export default withRouter(function GameDesignPage(props) {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const mafiaRoles = useSelector(state => state.mafiaRoles),
     villageRoles = useSelector(state => state.villageRoles),
@@ -81,11 +69,13 @@ export default withRouter(function GameDesignPage(props) {
 
   const uniqueAvailableRoles = [...new Set(availableRoles)];
 
-  const handleAllocate = () => {
-    if (players !== playerNames.filter(name => name !== "").length)
-      window.alert("Enter all player names or remove roles");
-    else if (players < 5) window.alert("Need minimum of 5 players. ");
-    else if (players === 0) window.alert("Add some roles");
+  const handleAllocate = e => {
+    e.preventDefault();
+    if (playerNames.length !== players)
+      dispatch(showAlert("Enter all player names or remove roles", "Error"));
+    else if (players < 5)
+      dispatch(showAlert("Need minimum of 5 players.", "Error"));
+    else if (players === 0) dispatch(showAlert("Add some roles", "Error"));
     else {
       firebase.analytics().logEvent("add_to_cart");
 
@@ -93,7 +83,7 @@ export default withRouter(function GameDesignPage(props) {
       let shuffledRoles = shuffle(availableRoles);
 
       let allotedRoles = [];
-      // allocate
+      // allocate randomly (Second shuffle)
       for (let i = 0; i < players; i++) {
         const countRolesLeft = shuffledRoles.length;
         const random = Math.random();
@@ -103,8 +93,7 @@ export default withRouter(function GameDesignPage(props) {
         allotedRoles.push({
           alive: true,
           allotedRole,
-          type: roleDescriptions[allotedRole].type,
-          hook: ""
+          type: roleDescriptions[allotedRole].type
         });
         shuffledRoles.splice(allotedRoleIndex, 1);
       }
@@ -114,109 +103,122 @@ export default withRouter(function GameDesignPage(props) {
   };
   const roleDisplay = (roleObject, roleUpdateFn) =>
     Object.entries(roleObject).map(([role, count]) => (
-      <Grid item key={role} className={classes.roleDisplay}>
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          alignItems="center">
-          <Grid
-            item
+      <Container key={role} style={{ borderBottom: "1px dashed #000000" }}>
+        <Row>
+          <Col
             style={{ cursor: "pointer" }}
             onClick={() => {
-              const { description, player, narrator } = roleDescriptions[role];
+              const { type, description, player, narrator } = roleDescriptions[
+                role
+              ];
 
-              window.alert(`Role : ${role}
-Description: ${description}   
-Player notes: ${player} 
-Master notes: ${narrator}
-            `);
+              dispatch(
+                showAlert(
+                  <>
+                    <p>Type: {type} </p>
+                    <p>Description: {description}</p>
+                    <p>Player notes: {player}</p>
+                    <p>Narrator notes: {narrator}</p>
+                  </>,
+                  true,
+                  `Role : ${role}`
+                )
+              );
             }}>
             {role}
-          </Grid>
-          <Grid item>
-            <Grid container>
-              <IconButton
-                disabled={count === 0}
-                size="small"
-                onClick={() => {
+          </Col>
+          <Col className="d-flex justify-content-end">
+            <FontAwesomeIcon
+              style={{
+                width: "20px",
+                margin: "4px 0px 4px 16px",
+                color: count === 0 ? "#a3a3a3" : "inherit"
+              }}
+              icon={
+                role === "twins" && count === 2
+                  ? faAngleDoubleDown
+                  : faChevronDown
+              }
+              onClick={() => {
+                if (count !== 0) {
                   dispatch(
                     roleUpdateFn({
                       ...roleObject,
-                      [role]: count - 1
+                      [role]: count - (role === "twins" && count === 2 ? 2 : 1)
                     })
                   );
-                }}>
-                <ArrowDownwardIcon />
-              </IconButton>
-              <Typography
-                variant="body1"
-                color={count === 0 ? "inherit" : "secondary"}>
-                {count}
-              </Typography>
-              <IconButton
-                size="small"
-                onClick={() => {
-                  dispatch(
-                    roleUpdateFn({
-                      ...roleObject,
-                      [role]: count + 1
-                    })
-                  );
-                }}>
-                <ArrowUpwardIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+                }
+              }}
+            />
+            <span
+              style={{
+                textAlign: "center",
+                width: "20px",
+                margin: "4px 0px 4px 16px",
+                color: count === 0 ? "inherit" : "#FF0000"
+              }}>
+              {count}
+            </span>
+
+            <FontAwesomeIcon
+              style={{ width: "20px", margin: "4px 0px 4px 16px" }}
+              icon={
+                role === "twins" && count === 0 ? faAngleDoubleUp : faChevronUp
+              }
+              onClick={() => {
+                dispatch(
+                  roleUpdateFn({
+                    ...roleObject,
+                    [role]: count + (role === "twins" && count === 0 ? 2 : 1)
+                  })
+                );
+              }}
+            />
+          </Col>
+        </Row>
+      </Container>
     ));
 
   return (
-    <Grid container direction="column">
-      <NavigationLinks />
-      <Grid
-        container
-        direction="row"
-        justify="space-around"
-        align-items="flex-start">
-        <Grid item className={classes.column}>
-          <Typography variant="h4">Roles</Typography>
-          <Typography variant="caption">
-            Click on individual role name to read description (popup)
-          </Typography>
-          <Grid
-            container
-            className="roles"
-            direction="column"
-            alignItems="flex-start">
-            <Grid item className={classes.roleDisplayParent}>
-              <Typography variant="h5">Mafia roles ({mafiaCount})</Typography>
-            </Grid>
-            {roleDisplay(mafiaRoles, updateMafia)}
-            <Grid item className={classes.roleDisplayParent}>
-              <Typography variant="h5">
-                Village roles ({villagerCount}){" "}
-              </Typography>
-            </Grid>
-            {roleDisplay(villageRoles, updateVillage)}
-          </Grid>
-        </Grid>
-        <Grid item className={classes.column}>
-          <Typography variant="h4">People ({players})</Typography>
-          <Grid container className="people-names" direction="column">
+    <>
+      <Row style={{ width: "100%" }} className="d-flex justify-content-end">
+        <Col className="d-flex justify-content-end">
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            size="3x"
+            style={{ marginRight: "16px" }}
+            onClick={() => {
+              props.history.push("/game");
+            }}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={4}>
+          <h1>Roles</h1>
+          <p>Click on individual roles to popup details</p>
+          <h3>Mafia roles ({mafiaCount})</h3>
+          {roleDisplay(mafiaRoles, updateMafia)}
+          <h3 style={{ marginTop: "20px" }}>Village roles ({villagerCount})</h3>
+          {roleDisplay(villageRoles, updateVillage)}
+        </Col>
+        <Col sm={4}>
+          <h1 style={{ marginBottom: "30px" }}>People ({players})</h1>
+          <Form>
             {dummyArray.map((p, i) => (
-              <TextField
+              <Form.Control
                 key={i}
-                variant="outlined"
-                style={{ margin: "5px", width: "300px" }}
-                label={`Player :${i + 1}`}
-                value={playerNames[i] || ""}
+                required
+                size="lg"
+                type="text"
+                style={{ marginTop: "20px" }}
+                placeholder={`Enter name for player ${i + 1}`}
+                value={playerNames[i] ? playerNames[i].name : ""}
                 onChange={e => {
                   dispatch(
                     updatePlayers([
                       ...playerNames.slice(0, i),
-                      e.target.value,
+                      { ...playerNames[i], name: e.target.value },
                       ...playerNames.slice(i + 1)
                     ])
                   );
@@ -224,39 +226,27 @@ Master notes: ${narrator}
               />
             ))}
             <Button
-              variant="contained"
-              style={{ margin: "5px" }}
-              color="primary"
-              onClick={handleAllocate}>
+              type="submit"
+              onClick={handleAllocate}
+              style={{ marginTop: "20px", width: "100%" }}>
               Allocate!
             </Button>
-          </Grid>
-        </Grid>
-        <Grid item className={classes.column}>
-          <Typography variant="h4">Narrator Notes</Typography>
-          <Grid
-            container
-            direction="column"
-            justify="flex-start"
-            alignItems="flex-start">
-            {uniqueAvailableRoles
-              .filter(role => roleDescriptions[role].narrator !== "")
-              .map((role, i) => (
-                <Grid item key={i}>
-                  <strong>{role}</strong> - {roleDescriptions[role].narrator}
-                </Grid>
-              ))}
-          </Grid>
-        </Grid>
-        <Grid item>
-          <IconButton
-            onClick={() => {
-              props.history.push("/game");
-            }}>
-            <ChevronRightIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </Grid>
+          </Form>
+        </Col>
+        <Col sm={4}>
+          <span>
+            <h1>Narrator notes </h1>
+          </span>
+
+          {uniqueAvailableRoles
+            .filter(role => roleDescriptions[role].narrator !== "")
+            .map((role, i) => (
+              <p key={i}>
+                <strong>{role} </strong> -{roleDescriptions[role].narrator}
+              </p>
+            ))}
+        </Col>
+      </Row>
+    </>
   );
 });
