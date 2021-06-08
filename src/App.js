@@ -17,7 +17,7 @@ import Row from "react-bootstrap/Row";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Container fluid style={{ marginTop: "60px", padding: "10px" }}>
         <NavigationLinks />
 
