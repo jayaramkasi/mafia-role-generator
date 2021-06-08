@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import firebase from "firebase";
-import "firebase/performance";
-
 import "./App.css";
 
 import GameDesignPage from "./pages/GameDesignPage";
@@ -19,14 +16,6 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
 function App() {
-  const perf = firebase.performance();
-  const trace = perf.trace("appLoad");
-  trace.start();
-
-  useEffect(() => {
-    trace.stop();
-  }, [trace]);
-
   return (
     <BrowserRouter>
       <Container fluid style={{ marginTop: "60px", padding: "10px" }}>

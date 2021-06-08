@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -35,8 +36,6 @@ export default withRouter(function GameManagementPage(props) {
     villageAlive = aliveAllocation.filter(
       role => role.type !== "M" || role.allotedRole === "idiot"
     ).length;
-
-  console.log(allocation);
 
   return (
     <Container>
@@ -67,11 +66,14 @@ export default withRouter(function GameManagementPage(props) {
             {allocation.map((role, i) => (
               <Row
                 key={i}
+                className="justify-content-end"
                 style={{
                   margin: "16px",
                   textDecoration: role.alive || "line-through"
                 }}>
-                <Col>
+                <Col
+                  sm={3}
+                  className="d-flex align-items-center justify-content-end">
                   <span
                     style={{
                       color:
@@ -83,27 +85,35 @@ export default withRouter(function GameManagementPage(props) {
                     }}>
                     {playerNames[i].name} - {role.allotedRole}
                   </span>
-                  <FontAwesomeIcon
-                    style={{ marginLeft: "16px", cursor: "pointer" }}
-                    icon={role.alive ? faCheckCircle : faBan}
-                    onClick={() => {
-                      dispatch(
-                        updateAllocation([
-                          ...allocation.slice(0, i),
-                          { ...role, alive: !role.alive },
-                          ...allocation.slice(i + 1)
-                        ])
-                      );
-                    }}
-                  />
                 </Col>
-                <Col>
+                <Col
+                  sm={9}
+                  className="d-flex align-items-center justify-content-start">
                   <InputGroup
+                    className="align-items-center"
                     style={{
                       margin: "0px 16px",
-                      width: "600px",
                       maxWidth: "90%"
                     }}>
+                    <InputGroup.Prepend className="justify-content-center">
+                      <Button
+                        variant={role.alive ? "success" : "danger"}
+                        onClick={() => {
+                          dispatch(
+                            updateAllocation([
+                              ...allocation.slice(0, i),
+                              { ...role, alive: !role.alive },
+                              ...allocation.slice(i + 1)
+                            ])
+                          );
+                        }}>
+                        {role.alive ? "Alive" : "Dead"}
+                        <FontAwesomeIcon
+                          style={{ marginLeft: "16px", cursor: "pointer" }}
+                          icon={role.alive ? faCheckCircle : faBan}
+                        />
+                      </Button>
+                    </InputGroup.Prepend>
                     <Form.Control
                       value={playerNames[i].hook || ""}
                       placeholder={`Hook for ${playerNames[i].name}`}
@@ -118,9 +128,7 @@ export default withRouter(function GameManagementPage(props) {
                       }}
                     />
                     <InputGroup.Append>
-                      <FontAwesomeIcon
-                        icon={faPaperPlane}
-                        style={{ margin: "20px" }}
+                      <Button
                         onClick={async () => {
                           let otherAlerts = [];
                           if (role.allotedRole === "twins") {
@@ -179,8 +187,12 @@ export default withRouter(function GameManagementPage(props) {
                               );
                             });
                           }
-                        }}
-                      />
+                        }}>
+                        <FontAwesomeIcon
+                          icon={faPaperPlane}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </Button>
                     </InputGroup.Append>
                   </InputGroup>
                 </Col>

@@ -27,9 +27,6 @@ import Button from "react-bootstrap/Button";
 
 import roleDescriptions from "../../roleDescriptions.json";
 
-import firebase from "firebase";
-import "firebase/performance";
-
 //Shuffle an array (stackoverflow)
 function shuffle(a) {
   let j, x, i;
@@ -77,8 +74,6 @@ export default withRouter(function GameDesignPage(props) {
       dispatch(showAlert("Need minimum of 5 players.", "Error"));
     else if (players === 0) dispatch(showAlert("Add some roles", "Error"));
     else {
-      firebase.analytics().logEvent("add_to_cart");
-
       // Shuffle
       let shuffledRoles = shuffle(availableRoles);
 
@@ -108,9 +103,8 @@ export default withRouter(function GameDesignPage(props) {
           <Col
             style={{ cursor: "pointer" }}
             onClick={() => {
-              const { type, description, player, narrator } = roleDescriptions[
-                role
-              ];
+              const { type, description, player, narrator } =
+                roleDescriptions[role];
 
               dispatch(
                 showAlert(
