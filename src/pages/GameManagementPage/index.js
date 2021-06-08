@@ -58,7 +58,7 @@ export default withRouter(function GameManagementPage(props) {
             Game status - Mafia {mafiaAlive} vs Villagers {villageAlive}
           </h3>
           <h3>
-            {mafiaAlive > villageAlive
+            {mafiaAlive >= villageAlive
               ? "Mafia wins!"
               : villageAlive > 0 && mafiaAlive === 0 && "Village wins!"}
           </h3>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 
 import "./App.css";
 
@@ -17,15 +17,15 @@ import Row from "react-bootstrap/Row";
 
 function App() {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter basename="/">
       <Container fluid style={{ marginTop: "60px", padding: "10px" }}>
         <NavigationLinks />
 
         <Switch>
-          <Route exact path="/" component={GameDesignPage} />
           <Route exact path="/roles" component={RolesPage} />
           <Route exact path="/game" component={GameManagementPage} />
           <Route exact path="/howtoplay" component={HowToUsePage} />
+          <Route exact path="/*" component={GameDesignPage} />
         </Switch>
         <Row
           style={{
@@ -38,7 +38,7 @@ function App() {
       </Container>
       <StopAlert />
       <ShortToast />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
