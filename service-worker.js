@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/mafia-role-generator/precache-manifest.f04053bcdeb03bea701edba68169dc08.js"
+  "/mafia-role-generator/precache-manifest.f90f5dfa98a804a933b92679c3701643.js"
 );
 
 self.addEventListener('message', (event) => {
