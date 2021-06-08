@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/mafia-role-generator/static/css/main.0d0c13ed.chunk.css",
-    "main.js": "/mafia-role-generator/static/js/main.b176fdfc.chunk.js",
-    "main.js.map": "/mafia-role-generator/static/js/main.b176fdfc.chunk.js.map",
+    "main.js": "/mafia-role-generator/static/js/main.df39fad6.chunk.js",
+    "main.js.map": "/mafia-role-generator/static/js/main.df39fad6.chunk.js.map",
     "runtime-main.js": "/mafia-role-generator/static/js/runtime-main.09b69be1.js",
     "runtime-main.js.map": "/mafia-role-generator/static/js/runtime-main.09b69be1.js.map",
     "static/css/2.9233ae65.chunk.css": "/mafia-role-generator/static/css/2.9233ae65.chunk.css",
-    "static/js/2.d8232d09.chunk.js": "/mafia-role-generator/static/js/2.d8232d09.chunk.js",
-    "static/js/2.d8232d09.chunk.js.map": "/mafia-role-generator/static/js/2.d8232d09.chunk.js.map",
+    "static/js/2.45f1b8d9.chunk.js": "/mafia-role-generator/static/js/2.45f1b8d9.chunk.js",
+    "static/js/2.45f1b8d9.chunk.js.map": "/mafia-role-generator/static/js/2.45f1b8d9.chunk.js.map",
     "index.html": "/mafia-role-generator/index.html",
-    "precache-manifest.7cc3374ca692b0ce08d5507afa954692.js": "/mafia-role-generator/precache-manifest.7cc3374ca692b0ce08d5507afa954692.js",
+    "precache-manifest.f04053bcdeb03bea701edba68169dc08.js": "/mafia-role-generator/precache-manifest.f04053bcdeb03bea701edba68169dc08.js",
     "service-worker.js": "/mafia-role-generator/service-worker.js",
     "static/css/2.9233ae65.chunk.css.map": "/mafia-role-generator/static/css/2.9233ae65.chunk.css.map",
     "static/css/main.0d0c13ed.chunk.css.map": "/mafia-role-generator/static/css/main.0d0c13ed.chunk.css.map",
-    "static/js/2.d8232d09.chunk.js.LICENSE.txt": "/mafia-role-generator/static/js/2.d8232d09.chunk.js.LICENSE.txt"
+    "static/js/2.45f1b8d9.chunk.js.LICENSE.txt": "/mafia-role-generator/static/js/2.45f1b8d9.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.09b69be1.js",
     "static/css/2.9233ae65.chunk.css",
-    "static/js/2.d8232d09.chunk.js",
+    "static/js/2.45f1b8d9.chunk.js",
     "static/css/main.0d0c13ed.chunk.css",
-    "static/js/main.b176fdfc.chunk.js"
+    "static/js/main.df39fad6.chunk.js"
   ]
 }
