@@ -25,14 +25,26 @@ const initialState = {
     creep: 0,
     gravedigger: 0,
     sniper: 0,
-    bulletproof: 0,
+    bulletproof: 1,
     doc: 1,
     cop: 1,
     villager: 1,
     twins: 0
   },
-  playerNames: [],
-  allocation: [],
+  playerNames: [
+    { name: "A" },
+    { name: "A" },
+    { name: "A" },
+    { name: "A" },
+    { name: "A" }
+  ],
+  allocation: [
+    { alive: true, allotedRole: "cop" },
+    { alive: true, allotedRole: "mafia", type: "M" },
+    { alive: true, allotedRole: "cop" },
+    { alive: true, allotedRole: "cop" },
+    { alive: true, allotedRole: "cop" }
+  ],
   alert: {
     show: false,
     header: "",

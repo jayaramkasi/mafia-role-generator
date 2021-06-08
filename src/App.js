@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { HashRouter, Switch, Route } from "react-router-dom";
 
 import "./App.css";
@@ -18,7 +18,13 @@ import Row from "react-bootstrap/Row";
 function App() {
   return (
     <HashRouter basename="/">
-      <Container fluid style={{ marginTop: "60px", padding: "10px" }}>
+      <Container
+        fluid
+        style={{
+          marginTop: "60px",
+          padding: "0px 10px 0px 20px",
+          minHeight: "100%"
+        }}>
         <NavigationLinks />
 
         <Switch>
@@ -31,7 +37,8 @@ function App() {
           style={{
             padding: "15px",
             backgroundColor: "#000000",
-            color: "#FFFFFF"
+            color: "#FFFFFF",
+            bottom: "0"
           }}>
           <p>Built with React. </p>
         </Row>

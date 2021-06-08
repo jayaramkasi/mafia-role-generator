@@ -175,18 +175,9 @@ export default withRouter(function GameDesignPage(props) {
 
   return (
     <>
-      <Row style={{ width: "100%" }} className="d-flex justify-content-end">
-        <Col className="d-flex justify-content-end">
-          <FontAwesomeIcon
-            icon={faChevronRight}
-            size="3x"
-            style={{ marginRight: "16px" }}
-            onClick={() => {
-              props.history.push("/game");
-            }}
-          />
-        </Col>
-      </Row>
+      <Row
+        style={{ width: "100%" }}
+        className="d-flex justify-content-end"></Row>
       <Row>
         <Col sm={4}>
           <h1>Roles</h1>
@@ -224,6 +215,14 @@ export default withRouter(function GameDesignPage(props) {
               onClick={handleAllocate}
               style={{ marginTop: "20px", width: "100%" }}>
               Allocate!
+            </Button>
+            <Button
+              style={{ marginTop: "20px", width: "100%" }}
+              variant="outline-primary"
+              onClick={() => {
+                props.history.push("/game");
+              }}>
+              Current game
             </Button>
           </Form>
         </Col>
