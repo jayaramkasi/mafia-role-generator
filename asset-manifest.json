@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/mafia-role-generator/static/css/main.0d0c13ed.chunk.css",
-    "main.js": "/mafia-role-generator/static/js/main.4489d471.chunk.js",
-    "main.js.map": "/mafia-role-generator/static/js/main.4489d471.chunk.js.map",
+    "main.js": "/mafia-role-generator/static/js/main.4643ca26.chunk.js",
+    "main.js.map": "/mafia-role-generator/static/js/main.4643ca26.chunk.js.map",
     "runtime-main.js": "/mafia-role-generator/static/js/runtime-main.09b69be1.js",
     "runtime-main.js.map": "/mafia-role-generator/static/js/runtime-main.09b69be1.js.map",
     "static/css/2.9233ae65.chunk.css": "/mafia-role-generator/static/css/2.9233ae65.chunk.css",
     "static/js/2.d8232d09.chunk.js": "/mafia-role-generator/static/js/2.d8232d09.chunk.js",
     "static/js/2.d8232d09.chunk.js.map": "/mafia-role-generator/static/js/2.d8232d09.chunk.js.map",
     "index.html": "/mafia-role-generator/index.html",
-    "precache-manifest.a71ab552e2c9d3c07bce8027b9dd2334.js": "/mafia-role-generator/precache-manifest.a71ab552e2c9d3c07bce8027b9dd2334.js",
+    "precache-manifest.08ceb1af6fdfc3b7bf2425e272505625.js": "/mafia-role-generator/precache-manifest.08ceb1af6fdfc3b7bf2425e272505625.js",
     "service-worker.js": "/mafia-role-generator/service-worker.js",
     "static/css/2.9233ae65.chunk.css.map": "/mafia-role-generator/static/css/2.9233ae65.chunk.css.map",
     "static/css/main.0d0c13ed.chunk.css.map": "/mafia-role-generator/static/css/main.0d0c13ed.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.9233ae65.chunk.css",
     "static/js/2.d8232d09.chunk.js",
     "static/css/main.0d0c13ed.chunk.css",
-    "static/js/main.4489d471.chunk.js"
+    "static/js/main.4643ca26.chunk.js"
   ]
 }

@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "cfb031bb6a2e73426b1ba8366bba38e5",
+    "revision": "134fbad749d01697a94e6e5a6273f323",
     "url": "/mafia-role-generator/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/mafia-role-generator/static/css/2.9233ae65.chunk.css"
   },
   {
-    "revision": "2e69d78a3a66d7e0e0df",
+    "revision": "52b7e82209d008271b0d",
     "url": "/mafia-role-generator/static/css/main.0d0c13ed.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/mafia-role-generator/static/js/2.d8232d09.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "2e69d78a3a66d7e0e0df",
-    "url": "/mafia-role-generator/static/js/main.4489d471.chunk.js"
+    "revision": "52b7e82209d008271b0d",
+    "url": "/mafia-role-generator/static/js/main.4643ca26.chunk.js"
   },
   {
     "revision": "f911f5b0e3d097f5122c",
