@@ -11,11 +11,10 @@ export default function ShortToast(props) {
     <Toast
       style={{
         position: "absolute",
-        top: 0,
-        right: 0
+        top: 70,
+        right: 20
       }}
-      autoHide
-      dismissible
+      autohide
       show={show}
       delay={5000}
       onClose={() => {

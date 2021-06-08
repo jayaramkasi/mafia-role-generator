@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import React from "react";
+import { HashRouter, Switch, Route } from "react-router-dom";
 
 import "./App.css";
 
@@ -17,28 +17,35 @@ import Row from "react-bootstrap/Row";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Container fluid style={{ marginTop: "60px", padding: "10px" }}>
+    <HashRouter basename="/">
+      <Container
+        fluid
+        style={{
+          marginTop: "60px",
+          padding: "0px 10px 0px 20px",
+          minHeight: "100%"
+        }}>
         <NavigationLinks />
 
         <Switch>
-          <Route exact path="/" component={GameDesignPage} />
           <Route exact path="/roles" component={RolesPage} />
           <Route exact path="/game" component={GameManagementPage} />
           <Route exact path="/howtoplay" component={HowToUsePage} />
+          <Route exact path="/*" component={GameDesignPage} />
         </Switch>
         <Row
           style={{
             padding: "15px",
             backgroundColor: "#000000",
-            color: "#FFFFFF"
+            color: "#FFFFFF",
+            bottom: "0"
           }}>
           <p>Built with React. </p>
         </Row>
       </Container>
       <StopAlert />
       <ShortToast />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

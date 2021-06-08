@@ -15,7 +15,7 @@ export default withRouter(function NavigationLinks(props) {
       expand="lg"
       bg="dark"
       variant="dark"
-      style={{ padding: "0px" }}>
+      style={{ padding: "0px 20px" }}>
       <Navbar.Brand>
         <Link to="/">Mafia role allocator</Link>
       </Navbar.Brand>
