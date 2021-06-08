@@ -115,9 +115,10 @@ export default function GameManagementPage(props) {
         </Row>
 
         <Row className="justify-content-end">
-          <Col sm={3} style={{ textAlign: "center" }}>
-            <strong>Notes, name</strong>
+          <Col sm={2} style={{ textAlign: "center" }}>
+            <strong> Name</strong>
           </Col>
+          <Col sm={1}>Role</Col>
           <Col sm={9} style={{ textAlign: "center" }}>
             <strong>Webhook</strong>
           </Col>
@@ -128,26 +129,20 @@ export default function GameManagementPage(props) {
             className="justify-content-end"
             style={{
               margin: "16px",
-              textDecoration: role.alive || "line-through"
+              textDecoration: role.alive || "line-through",
+              color:
+                role.allotedRole === "godfather"
+                  ? "#FF9800"
+                  : role.type === "M"
+                  ? "#FF0000"
+                  : "inherit"
             }}>
-            <Col
-              sm={3}
-              className="d-flex align-items-center justify-content-between">
-              <Form.Control style={{ width: "100px" }} />
-              <span
-                style={{
-                  color:
-                    role.allotedRole === "godfather"
-                      ? "#FF9800"
-                      : role.type === "M"
-                      ? "#FF0000"
-                      : "inherit"
-                }}>
-                {playerNames[i].name} - {role.allotedRole}
-              </span>
+            <Col sm={2} style={{}}>
+              {playerNames[i].name}
             </Col>
+            <Col sm={1}>{role.allotedRole}</Col>
             <Col
-              sm={9}
+              sm={8}
               className="d-flex align-items-center justify-content-start">
               <InputGroup
                 className="align-items-center"
@@ -189,6 +184,9 @@ export default function GameManagementPage(props) {
                 />
                 <InputGroup.Append>
                   <Button
+                    variant={
+                      isValidUrl(playerNames[i].hook) ? "primary" : "secondary"
+                    }
                     disabled={!isValidUrl(playerNames[i].hook)}
                     onClick={async () => {
                       let otherAlerts = [];

@@ -149,7 +149,12 @@ export default withRouter(function GameDesignPage(props) {
                 textAlign: "center",
                 width: "20px",
                 margin: "4px 0px 4px 16px",
-                color: count === 0 ? "inherit" : "#FF0000"
+                color:
+                  count === 0
+                    ? "inherit"
+                    : roleDescriptions[role].type === "M"
+                    ? "red"
+                    : "green"
               }}>
               {count}
             </span>
@@ -160,6 +165,7 @@ export default withRouter(function GameDesignPage(props) {
                 role === "twins" && count === 0 ? faAngleDoubleUp : faChevronUp
               }
               onClick={() => {
+                console.log();
                 dispatch(
                   roleUpdateFn({
                     ...roleObject,
@@ -182,9 +188,14 @@ export default withRouter(function GameDesignPage(props) {
         <Col sm={4}>
           <h1>Roles</h1>
           <p>Click on individual roles to popup details</p>
-          <h3>Mafia roles ({mafiaCount})</h3>
+          <h3>
+            Mafia roles <span style={{ color: "red" }}>{mafiaCount}</span>
+          </h3>
           {roleDisplay(mafiaRoles, updateMafia)}
-          <h3 style={{ marginTop: "20px" }}>Village roles ({villagerCount})</h3>
+          <h3 style={{ marginTop: "20px" }}>
+            Village roles{" "}
+            <span style={{ color: "green" }}>{villagerCount}</span>
+          </h3>
           {roleDisplay(villageRoles, updateVillage)}
         </Col>
         <Col sm={4}>
