@@ -1,7 +1,7 @@
 {
   "name": "mafia-role-generator",
   "version": "0.1.0",
-  "homepage": "http://jayaramkasi.github.io/mafia-role-generator",
+  "homepage": "http://jayaramkasi.github.io/mafia-role-allocator",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
