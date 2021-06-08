@@ -1,5 +1,7 @@
 This is a simple frontend helper app for assigning roles to participants in the party game - Mafia (Werewolf)
 
+Demo [here](https://jayaramkasi.github.io/mafia-role-generator/#/) 
+
 ## How to use
 
 Enter the number of villager and mafia roles (enter number of special roles like Cops, docs, godfathers, village idiots etc).
